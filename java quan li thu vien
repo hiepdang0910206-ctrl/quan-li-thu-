@@ -1,0 +1,255 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// ==========================================
+// PHỤ TRÁCH: ĐẶNG XUÂN HIỆP (Yêu cầu 1)
+// ==========================================
+
+// Lớp cơ sở TaiLieu
+class TaiLieu {
+    private String maTaiLieu;
+    private String tenNhaXuatBan;
+    private int soBansPhatHanh;
+
+    public TaiLieu(String maTaiLieu, String tenNhaXuatBan, int soBansPhatHanh) {
+        this.maTaiLieu = maTaiLieu;
+        this.tenNhaXuatBan = tenNhaXuatBan;
+        this.soBansPhatHanh = soBansPhatHanh;
+    }
+
+    public String getMaTaiLieu() {
+        return maTaiLieu;
+    }
+
+    public void setMaTaiLieu(String maTaiLieu) {
+        this.maTaiLieu = maTaiLieu;
+    }
+
+    public String getTenNhaXuatBan() {
+        return tenNhaXuatBan;
+    }
+
+    public void setTenNhaXuatBan(String tenNhaXuatBan) {
+        this.tenNhaXuatBan = tenNhaXuatBan;
+    }
+
+    public int getSoBansPhatHanh() {
+        return soBansPhatHanh;
+    }
+
+    public void setSoBansPhatHanh(int soBansPhatHanh) {
+        this.soBansPhatHanh = soBansPhatHanh;
+    }
+
+    public void hienThi() {
+        System.out.println("Mã tài liệu: " + maTaiLieu + " | NXB: " + tenNhaXuatBan + " | Số bản phát hành: " + soBansPhatHanh);
+    }
+}
+
+// Lớp Sách kế thừa TaiLieu
+class Sach extends TaiLieu {
+    private String tenTacGia;
+    private int soTrang;
+
+    public Sach(String maTaiLieu, String tenNhaXuatBan, int soBansPhatHanh, String tenTacGia, int soTrang) {
+        super(maTaiLieu, tenNhaXuatBan, soBansPhatHanh);
+        this.tenTacGia = tenTacGia;
+        this.soTrang = soTrang;
+    }
+
+    @Override
+    public void hienThi() {
+        System.out.print("[SÁCH] ");
+        super.hienThi();
+        System.out.println("       Tác giả: " + tenTacGia + " | Số trang: " + soTrang);
+    }
+}
+
+// Lớp Tạp chí kế thừa TaiLieu
+class TapChi extends TaiLieu {
+    private int soPhatHanh;
+    private int thangPhatHanh;
+
+    public TapChi(String maTaiLieu, String tenNhaXuatBan, int soBansPhatHanh, int soPhatHanh, int thangPhatHanh) {
+        super(maTaiLieu, tenNhaXuatBan, soBansPhatHanh);
+        this.soPhatHanh = soPhatHanh;
+        this.thangPhatHanh = thangPhatHanh;
+    }
+
+    @Override
+    public void hienThi() {
+        System.out.print("[TẠP CHÍ] ");
+        super.hienThi();
+        System.out.println("       Số phát hành: " + soPhatHanh + " | Tháng phát hành: " + thangPhatHanh);
+    }
+}
+
+// Lớp Báo kế thừa TaiLieu
+class Bao extends TaiLieu {
+    private String ngayPhatHanh;
+
+    public Bao(String maTaiLieu, String tenNhaXuatBan, int soBansPhatHanh, String ngayPhatHanh) {
+        super(maTaiLieu, tenNhaXuatBan, soBansPhatHanh);
+        this.ngayPhatHanh = ngayPhatHanh;
+    }
+
+    @Override
+    public void hienThi() {
+        System.out.print("[BÁO] ");
+        super.hienThi();
+        System.out.println("       Ngày phát hành: " + ngayPhatHanh);
+    }
+}
+
+
+// ==========================================
+// PHỤ TRÁCH: BÙI GIA LINH & BÙI VĂN CƯỜNG (Yêu cầu 2)
+// ==========================================
+
+class QuanLyTaiLieu {
+    private ArrayList<TaiLieu> danhSach = new ArrayList<>();
+    private Scanner scanner = new Scanner(System.in);
+
+    // BÙI GIA LINH: Thêm mới tài liệu
+    public void themTaiLieu() {
+        System.out.println("Chọn loại tài liệu cần thêm (1. Sách - 2. Tạp chí - 3. Báo): ");
+        int chon = Integer.parseInt(scanner.nextLine());
+
+        System.out.print("Nhập mã tài liệu: ");
+        String ma = scanner.nextLine();
+        
+        // Kiểm tra mã duy nhất
+        for (TaiLieu tl : danhSach) {
+            if (tl.getMaTaiLieu().equalsIgnoreCase(ma)) {
+                System.out.println("Lỗi: Mã tài liệu đã tồn tại!");
+                return;
+            }
+        }
+
+        System.out.print("Nhập tên nhà xuất bản: ");
+        String nxb = scanner.nextLine();
+        System.out.print("Nhập số bản phát hành: ");
+        int soBan = Integer.parseInt(scanner.nextLine());
+
+        if (chon == 1) {
+            System.out.print("Nhập tên tác giả: ");
+            String tacGia = scanner.nextLine();
+            System.out.print("Nhập số trang: ");
+            int soTrang = Integer.parseInt(scanner.nextLine());
+            danhSach.add(new Sach(ma, nxb, soBan, tacGia, soTrang));
+            System.out.println("Thêm sách thành công!");
+        } else if (chon == 2) {
+            System.out.print("Nhập số phát hành: ");
+            int soPH = Integer.parseInt(scanner.nextLine());
+            System.out.print("Nhập tháng phát hành: ");
+            int thangPH = Integer.parseInt(scanner.nextLine());
+            danhSach.add(new TapChi(ma, nxb, soBan, soPH, thangPH));
+            System.out.println("Thêm tạp chí thành công!");
+        } else if (chon == 3) {
+            System.out.print("Nhập ngày phát hành (dd/MM/yyyy): ");
+            String ngayPH = scanner.nextLine();
+            danhSach.add(new Bao(ma, nxb, soBan, ngayPH));
+            System.out.println("Thêm báo thành công!");
+        } else {
+            System.out.println("Lựa chọn không hợp lệ!");
+        }
+    }
+
+    // BÙI GIA LINH: Xoá tài liệu theo mã
+    public void xoaTaiLieu() {
+        System.out.print("Nhập mã tài liệu cần xoá: ");
+        String ma = scanner.nextLine();
+        boolean found = false;
+        for (int i = 0; i < danhSach.size(); i++) {
+            if (danhSach.get(i).getMaTaiLieu().equalsIgnoreCase(ma)) {
+                danhSach.remove(i);
+                found = true;
+                System.out.println("Đã xoá thành công tài liệu mã: " + ma);
+                break;
+            }
+        }
+        if (!found) {
+            System.out.println("Không tìm thấy tài liệu có mã: " + ma);
+        }
+    }
+
+    // BÙI GIA LINH: Hiển thị thông tin về tài liệu
+    public void hienThiDanhSach() {
+        if (danhSach.isEmpty()) {
+            System.out.println("Thư viện hiện chưa có tài liệu nào!");
+            return;
+        }
+        System.out.println("\n--- DANH SÁCH TÀI LIỆU TRONG THƯ VIỆN ---");
+        for (TaiLieu tl : danhSach) {
+            tl.hienThi();
+            System.out.println("----------------------------------------");
+        }
+    }
+
+    // BÙI VĂN CƯỜNG: Tìm kiếm tài liệu theo loại
+    public void timKiemTheoLoai() {
+        System.out.println("Chọn loại cần tìm (1. Sách - 2. Tạp chí - 3. Báo): ");
+        int chon = Integer.parseInt(scanner.nextLine());
+        boolean found = false;
+
+        System.out.println("\n--- KẾT QUẢ TÌM KIẾM ---");
+        for (TaiLieu tl : danhSach) {
+            if (chon == 1 && tl instanceof Sach) {
+                tl.hienThi();
+                found = true;
+            } else if (chon == 2 && tl instanceof TapChi) {
+                tl.hienThi();
+                found = true;
+            } else if (chon == 3 && tl instanceof Bao) {
+                tl.hienThi();
+                found = true;
+            }
+        }
+        if (!found) {
+            System.out.println("Không tìm thấy tài liệu thuộc loại này trong thư viện.");
+        }
+    }
+
+    // BÙI VĂN CƯỜNG: Menu chính và điều hướng chương trình
+    public void menu() {
+        int luaChon;
+        do {
+            System.out.println("\n========= QUẢN LÝ THƯ VIỆN TÀI LIỆU =========");
+            System.out.println("1. Thêm mới tài liệu (Sách, Tạp chí, Báo)");
+            System.out.println("2. Hiển thị thông tin tài liệu");
+            System.out.println("3. Xoá tài liệu theo mã");
+            System.out.println("4. Tìm kiếm tài liệu theo loại");
+            System.out.println("5. Thoát chương trình");
+            System.out.print("Nhập lựa chọn của bạn (1-5): ");
+            luaChon = Integer.parseInt(scanner.nextLine());
+
+            switch (luaChon) {
+                case 1:
+                    themTaiLieu();
+                    break;
+                case 2:
+                    hienThiDanhSach();
+                    break;
+                case 3:
+                    xoaTaiLieu();
+                    break;
+                case 4:
+                    timKiemTheoLoai();
+                    break;
+                case 5:
+                    System.out.println("Cảm ơn bạn đã sử dụng chương trình!");
+                    break;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ, vui lòng chọn lại từ 1 đến 5.");
+            }
+        } while (luaChon != 5);
+    }
+}
+
+// Lớp Main để chạy chương trình
+public class Main {
+    public static void main(String[] args) {
+        QuanLyTaiLieu ql = new QuanLyTaiLieu();
+        ql.menu();
+    }
+}
